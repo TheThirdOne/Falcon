@@ -3,7 +3,7 @@
     
   </head>
   <body>
-    <form method="post" enctype="multipart/form-data" action="/create" id="form">
+    <form enctype="multipart/form-data" action="/create" id="form">
         <div id="name">Name: <input type="text" name="name" required></div>
         <div id="dest">Destination:<input type="text" name="destination" required></div>
         <div id="quantity">Quantity:<input type="text" name="quantity" required></div>
@@ -13,11 +13,44 @@
         <div id="image">Image: <input type="file" name="file" id="file" required></div>
         <input type="submit" value="Submit">
     </form>
+    <form method="get" enctype="multipart/form-data" action="/get" id="getter">
+        <div id="uni-bar">Search: <input type="text" name="uni-bar" required></div>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="results"></div>
+    
     <script>
     document.getElementById("form").onsubmit=function() {
       var data = new FormData(document.getElementById("form"));
       var request = new XMLHttpRequest();
       request.open("POST", "/create");
+      request.send(data);
+      return false;
+    };
+    document.getElementById("getter").onsubmit=function() {
+      var data = new FormData();
+      var str = document.getElementById("uni-bar").childNodes[1].value,t;
+      console.log(str);
+      str = str.split(' ');
+      for(var i = 0; i < str.length;i++){
+        console.log(str[i]);
+        if(str[i].indexOf(':')!==-1){
+           t = str[i].split(':');
+           console.log(t);
+           data.append(t[0],t[1]);
+        }
+      }
+      var request = new XMLHttpRequest();
+      request.open("POST", "/get");
+      
+      request.onload = function(){
+        var res = JSON.parse(this.responseText);
+        var out = '';
+        for(var i = 0; i < res.length;i++){
+          out += '<img height="128" width="128" src="' + res[i].image + '"></img>'
+        }
+        document.getElementById("results").innerHTML = out;
+      }
       request.send(data);
       return false;
     };
@@ -50,7 +83,7 @@
       }
       return out;
     }
-    make(document.getElementsByTagName('select')[0],['Screw','Bolt','Nail'],selectorToNode(['thread','','']));
+    make(document.getElementsByTagName('select')[0],['Bolt','Nail','U-Channel'],selectorToNode(['thread','','']));
     </script>
   </body>
 </html>
