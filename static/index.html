@@ -4,24 +4,56 @@
   </head>
   <body>
     <form method="post" enctype="multipart/form-data" action="/upload" id="form">
-        Name: <input type="text" name="name">
-        Destination:<input type="text" name="destination">
-        Quantity:<input type="text" name="quantity">
-        Type:<input type="text" name="type">
-        Location:<input type="text" name="location">
-        <input type="file" name="file" id="file">
+        <div id="name">Name: <input type="text" name="name" required></div>
+        <div id="dest">Destination:<input type="text" name="destination" required></div>
+        <div id="quantity">Quantity:<input type="text" name="quantity" required></div>
+        <div id="type">Type:<select name="type">
+              <option>Screw</option>
+              <option>Bolt</option>
+              <option>Nail</option>
+            </select></div>
+        <div id="thread">Thread:<input type="text" name="thread"></div>
+        <div id="loc">Location:<input type="text" name="location" required></div>
+        <div id="image">Image: <input type="file" name="file" id="file" required></div>
         <input type="submit" value="Submit">
     </form>
     <script>
     document.getElementById("form").onsubmit=function() {
-       var data = new FormData();
-      data.append('name','my name');
-      data.append('file',document.getElementById("file").files[0])
+      var data = new FormData(document.getElementById("form"));
       var request = new XMLHttpRequest();
       request.open("POST", "/upload");
       request.send(data);
       return false;
     };
+    function make(selector,values,tohide){
+      var t;
+      for(var i = 0;i<values.length;i++){
+        t=document.createElement('option');
+        t.innerText = values[i];
+        selector.appendChild(t);
+      }
+      selector.onchange = function(){
+        for(var i = 0;i<values.length;i++){
+          if(selector.value !== values[i]){
+            tohide[i].style.display = 'none';
+            tohide[i].style.visibility = 'hidden';
+          }else{
+            tohide[i].style.display = '';
+            tohide[i].style.visibility = '';
+          }
+        }
+      }
+    }
+    function selectorToNode(sel){
+      var out = [];
+      for(var i = 0; i < sel.length; i++){
+        if(sel[i])
+          out[i]=document.getElementById(sel[i]);
+        else
+          out[i]=document.createElement('div');
+      }
+      return out;
+    }
     </script>
   </body>
 </html>

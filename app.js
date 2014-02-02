@@ -34,7 +34,7 @@ app.post('/upload',function(req,res){
           console.log("Upload completed!");
       });
   } else {
-      fs.unlink(tempPath, function () {
+      fs.unlink(tempPath, function (err) {
           if (err) throw err;
           console.error("Only .png files are allowed!");
       });
