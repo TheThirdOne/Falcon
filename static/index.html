@@ -47,7 +47,7 @@
         var res = JSON.parse(this.responseText);
         var out = '';
         for(var i = 0; i < res.length;i++){
-          out += '<img height="128" width="128" src="' + res[i].image + '"></img>'
+          out += '<img height="128" width="128" title="'+res[i].name+'" src="' + res[i].image + '"></img>'
         }
         document.getElementById("results").innerHTML = out;
       }

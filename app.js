@@ -15,10 +15,13 @@ app.post('/get', function(req, res){
   get(req.body,res);
 });
 function get(body,res){
-  db.items.find(body,function(err,items){
+  var skip = body.skip || 0;
+  var limit = body.limit || 5;
+  delete body.limit;
+  delete body.skip;
+  db.items.find(body).skip(parseInt(skip)).limit(parseInt(limit),function(err,items){
     res.send(items);
-  }).count(function(err,res){
-    console.log("Requested " + JSON.stringify(body) + "; " + res + " items found.");
+    console.log("Requested " + JSON.stringify(body) + "; " + items.length + " items found.");
   });
 }
 app.get('/create', function(req, res){
