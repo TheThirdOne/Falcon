@@ -3,15 +3,11 @@
     
   </head>
   <body>
-    <form method="post" enctype="multipart/form-data" action="/upload" id="form">
+    <form method="post" enctype="multipart/form-data" action="/create" id="form">
         <div id="name">Name: <input type="text" name="name" required></div>
         <div id="dest">Destination:<input type="text" name="destination" required></div>
         <div id="quantity">Quantity:<input type="text" name="quantity" required></div>
-        <div id="type">Type:<select name="type">
-              <option>Screw</option>
-              <option>Bolt</option>
-              <option>Nail</option>
-            </select></div>
+        <div id="type">Type:<select name="type"></select></div>
         <div id="thread">Thread:<input type="text" name="thread"></div>
         <div id="loc">Location:<input type="text" name="location" required></div>
         <div id="image">Image: <input type="file" name="file" id="file" required></div>
@@ -21,7 +17,7 @@
     document.getElementById("form").onsubmit=function() {
       var data = new FormData(document.getElementById("form"));
       var request = new XMLHttpRequest();
-      request.open("POST", "/upload");
+      request.open("POST", "/create");
       request.send(data);
       return false;
     };
@@ -54,6 +50,7 @@
       }
       return out;
     }
+    make(document.getElementsByTagName('select')[0],['Screw','Bolt','Nail'],selectorToNode(['thread','','']));
     </script>
   </body>
 </html>

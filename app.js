@@ -6,6 +6,7 @@ var db = require("mongojs").connect(databaseUrl, collections);
 var path = require('path'),
     fs = require('fs');
 app.use(express.static(__dirname+'/static'));
+app.use('/uploads',express.static(__dirname+'/uploads'));
 app.use(express.bodyParser({uploadDir:'./uploads'}));
 app.get('/get', function(req, res){
   db.items.find(req.query,function(err,items){
@@ -22,23 +23,15 @@ app.get('/create', function(req, res){
 });
 app.post('/create',function(req,res){
   console.log(req.body);
-  res.send('done');
-});
-app.post('/upload',function(req,res){
-  console.log(req.body);
-  var tempPath = req.files.file.path,
-      targetPath = path.resolve('./uploads/image.png');
-  if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-      fs.rename(tempPath, targetPath, function(err) {
-          if (err) throw err;
-          console.log("Upload completed!");
-      });
-  } else {
-      fs.unlink(tempPath, function (err) {
-          if (err) throw err;
-          console.error("Only .png files are allowed!");
-      });
+  var ext = path.extname(req.files.file.name).toLowerCase();
+  if(ext === '.png' || ext === '.jpeg' || ext === '.jpg' || ext === '.gif'){
+    req.body.image = req.files.file.path;
+    db.items.insert(req.body,function(err,data){
+      res.send(data);
+    });
+  }else{
+    throw 'File type Error'
   }
-  res.send('good');
+
 });
 app.listen(3000);
