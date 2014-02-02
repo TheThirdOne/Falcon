@@ -20,8 +20,12 @@ app.get('/create', function(req, res){
     res.send(data);
   });
 });
+app.post('/create',function(req,res){
+  console.log(req.body);
+  res.send('done');
+});
 app.post('/upload',function(req,res){
-  console.log(req.files);
+  console.log(req.body);
   var tempPath = req.files.file.path,
       targetPath = path.resolve('./uploads/image.png');
   if (path.extname(req.files.file.name).toLowerCase() === '.png') {

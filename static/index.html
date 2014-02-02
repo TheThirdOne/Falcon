@@ -1,4 +1,27 @@
-<form method="post" enctype="multipart/form-data" action="/upload">
-    <input type="file" name="file">
-    <input type="submit" value="Submit">
-</form>
+<html>
+  <head>
+    
+  </head>
+  <body>
+    <form method="post" enctype="multipart/form-data" action="/upload" id="form">
+        Name: <input type="text" name="name">
+        Destination:<input type="text" name="destination">
+        Quantity:<input type="text" name="quantity">
+        Type:<input type="text" name="type">
+        Location:<input type="text" name="location">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+    document.getElementById("form").onsubmit=function() {
+       var data = new FormData();
+      data.append('name','my name');
+      data.append('file',document.getElementById("file").files[0])
+      var request = new XMLHttpRequest();
+      request.open("POST", "/upload");
+      request.send(data);
+      return false;
+    };
+    </script>
+  </body>
+</html>
