@@ -1,11 +1,11 @@
 <html>
   <head>
-    
+    <link rel="stylesheet" type="text/css" href="main.css">
   </head>
   <body>
     <form enctype="multipart/form-data" action="/create" id="form">
         <div id="name">Name: <input type="text" name="name" required></div>
-        <div id="dest">Destination:<input type="text" name="destination" required></div>
+        <div id="desc">Description:<input type="text" name="description"></div>
         <div id="quantity">Quantity:<input type="text" name="quantity" required></div>
         <div id="type">Type:<select name="type"></select></div>
         <div id="thread">Thread:<input type="text" name="thread"></div>
@@ -45,11 +45,11 @@
       
       request.onload = function(){
         var res = JSON.parse(this.responseText);
-        var out = '';
+        var out = '<ul style="display:inline;">';
         for(var i = 0; i < res.length;i++){
-          out += '<img height="128" width="128" title="'+res[i].name+'" src="' + res[i].image + '"></img>'
+          out += '<li style="float:left;" ><a style="text-decoration: none;" href="item/'+res[i]._id+'"><div class="icon">'+res[i].name+'</div><img height="128" width="128" title="'+res[i].name+'" src="' + res[i].image + '"></img></a></li>'
         }
-        document.getElementById("results").innerHTML = out;
+        document.getElementById("results").innerHTML = out+"</ul>";
       }
       request.send(data);
       return false;

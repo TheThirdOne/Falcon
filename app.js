@@ -2,7 +2,9 @@ var express = require('express');
 var app = express();
 var databaseUrl = "test";
 var collections = ["items"];
-var db = require("mongojs").connect(databaseUrl, collections);
+var mongojs = require('mongojs');
+var ObjectId = mongojs.ObjectId;
+var db = mongojs.connect(databaseUrl, collections);
 var path = require('path'),
     fs = require('fs');
 app.use(express.static(__dirname+'/static'));
@@ -27,6 +29,13 @@ function get(body,res){
 app.get('/create', function(req, res){
   console.log(req.query);
   create(req.query,res);
+});
+app.get('/item/:id', function(req, res){
+  console.log(req.param("id"));
+  db.items.find({_id: ObjectId(req.param("id")) },function(err,items){
+    res.send(items);
+    console.log("Requested " + req.param("id"));
+  });
 });
 app.post('/create',function(req,res){
   console.log(req.body);
