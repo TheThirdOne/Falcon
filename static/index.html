@@ -4,13 +4,27 @@
   </head>
   <body>
     <form enctype="multipart/form-data" action="/create" id="form">
-        <div id="name">Name: <input type="text" name="name" required></div>
-        <div id="desc">Description:<input type="text" name="description"></div>
-        <div id="quantity">Quantity:<input type="text" name="quantity" required></div>
+        <div>Name: <input type="text" name="name" required></div>
+        <div>Part Number:<input type="text" name="partnumber"></div>
+        <div>Description:<input type="text" name="description"></div>
+        <div>Quantity:<input type="text" name="quantity" required></div>
         <div id="type">Type:<select name="type"></select></div>
-        <div id="thread">Thread:<input type="text" name="thread"></div>
-        <div id="loc">Location:<input type="text" name="location" required></div>
-        <div id="image">Image: <input type="file" name="file" id="file" required></div>
+        <div class="bolt u-channel belt plate rod wire">Length<input type="text" name="length"></div>
+        <div class="bolt nut">Thread:<input type="text" name="thread"></div>
+        <div class="bolt nut rod wheel sprocket">Diameter:<input type="text" name="diameter"></div>
+        <div class="bolt nut">Head Diameter:<input type="text" name="head-diameter"></div>
+        <div class="belt">Thickness:<input type="text" name="thickness"></div>
+        <div class="plate">Width:<input type="text" name="width"></div>
+        <div class="sprocket">Teeth:<input type="text" name="teeth"></div>
+        <div class="gearbox">Gear Ratio:<input type="text" name="gear-ratio"></div>
+        <div class="gearbox">Number of Motors:<input type="text" name="motors"></div>
+        <div class="build-misc">Other:<input type="text" name="misc"></div>
+        <div class="wire">Gauge:<input type="text" name="guage"></div>
+        <div class="motor">Power:<input type="text" name="power"></div>
+        <div class="fuse">Amps:<input type="text" name="amps"></div>
+        <div class="electronic-misc">Other:<input type="text" name="misc"></div>
+        <div>Location:<input type="text" name="location" required></div>
+        <div>Image: <input type="file" name="file" required></div>
         <input type="submit" value="Submit">
     </form>
     <form method="get" enctype="multipart/form-data" action="/get" id="getter">
@@ -62,13 +76,20 @@
         selector.appendChild(t);
       }
       selector.onchange = function(){
+        var temp;
         for(var i = 0;i<values.length;i++){
-          if(selector.value !== values[i]){
-            tohide[i].style.display = 'none';
-            tohide[i].style.visibility = 'hidden';
-          }else{
-            tohide[i].style.display = '';
-            tohide[i].style.visibility = '';
+          for(var k = 0; k < tohide[i].length;k++){
+              tohide[i][k].style.display = 'none';
+              tohide[i][k].style.visibility = 'hidden';
+          }
+        }
+        for(var i = 0;i<values.length;i++){
+          temp = selector.value !== values[i]
+          for(var k = 0; k < tohide[i].length;k++){
+            if(!temp){
+              tohide[i][k].style.display = '';
+              tohide[i][k].style.visibility = '';
+            }
           }
         }
       }
@@ -77,13 +98,15 @@
       var out = [];
       for(var i = 0; i < sel.length; i++){
         if(sel[i])
-          out[i]=document.getElementById(sel[i]);
+          out[i]=document.getElementsByClassName(sel[i]);
         else
-          out[i]=document.createElement('div');
+          out[i]=[];
       }
       return out;
     }
-    make(document.getElementsByTagName('select')[0],['Bolt','Nail','U-Channel'],selectorToNode(['thread','','']));
+    var types = ['bolt','nut','u-channel','belt','plate','wheel','corner','rod', 'sprocket','gearbox','build-misc',
+     'wire','motor','connectors','motor-controller','fuse','electronic-misc'];
+    make(document.getElementsByTagName('select')[0],types,selectorToNode(types));
     </script>
   </body>
 </html>
